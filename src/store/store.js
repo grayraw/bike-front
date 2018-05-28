@@ -16,12 +16,13 @@ const middleware = [
 //   routerMiddleware(history)
 ]
 
-let bikes = function(state = {filters: []}, action){
+let bikes = function(state = {bikeList: [], filters: []}, action){
   switch(action.type){
     case 'LOAD_BIKES': {
-      return {...state, bikeLists: [...action.payload]}
+      return {...state, bikeList: [...action.payload]}
     }
     case 'LOAD_FILTERS': {
+      // debugger;
       return {...state, filters: [...action.payload]}
     }
     default: {

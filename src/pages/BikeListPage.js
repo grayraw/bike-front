@@ -3,23 +3,26 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import store from './../store/store';
 import Filters from './../components/Filters';
+import BikeApi from './../services/BikeApi';
 
 class BikeListPage extends Component {
   constructor(props){
     super();
     // this.bikeList = this.bikeList.bind(this);
-    this.bikeList = this.bikeList || [];
+    // this.bikeList = this.bikeList || [];
   }
 
-  componentWillMount(){
-    
+  componentDidMount(){
+    BikeApi.getBikeList().then((res)=>{
+      if(res) store.dispatch({type: 'LOAD_BIKES', payload: res});
+    })    
   }
 
   render() {
     return (
       <div className="bike-list-container">{
-        this.bikeList.map((bike, i)=>{
-          return <span key={i}>'hui'</span>
+        this.props.bikeList.map((bike, i)=>{
+          return <span key={i}>{bike.title}, {bike.brand} </span> 
         })
       }
         {/* this.props.heirloomsPublic.map((heirloom)=>{

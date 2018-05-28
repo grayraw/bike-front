@@ -12,22 +12,36 @@ import * as qs from 'query-string';
 class Filters extends Component {
     constructor(props){
       super();
-      this.addParamToQuery = this.addParamToQuery.bind(this);
+      this.addFilter = this.addFilter.bind(this);
       // this.brandList = this.brandList.bind(this);
     }
 
-    addParamToQuery(val, param){
+    addFilter(filterValue, param){
+
+      // let newFilterSet = {...this.props.selectedFilters};
+      // newFilterSet[param] ? newFilterSet[param] = [...newFilterSet[param], val] : newFilterSet[param] = [val];
+      // newFilterSet[param] = [...new Set(newFilterSet[param])];      
+
+
+      filterValue.selected = !filterValue.selected;
+      let updatedFilters = [...this.props.filters];
+      
+      store.dispatch({
+        type: "LOAD_FILTERS",
+        payload: updatedFilters
+      })
+
+      //this updates url for bikeListPage to work with
+      //it's better to move it elsewhere per principle of separation of concern;
       let currentParams = qs.parse(window.location.search, {arrayFormat: "bracket"});
-      let newParams = {};
-      newParams = currentParams;
-      newParams[param] ? newParams[param] = [...newParams[param], val] : newParams[param] = [val];
-      newParams[param] = [...new Set(newParams[param])];
-      let newURL = qs.stringify(newParams, {arrayFormat: "bracket"});
+      currentParams[param] ? currentParams[param] = [...currentParams[param], filterValue.value] : currentParams[param] = [filterValue.value];
+      currentParams[param] = [...new Set(currentParams[param])];
+      let newURL = qs.stringify(currentParams, {arrayFormat: "bracket"});
       // window.location.search = newURL;
       window.history.pushState(null, null, "?" + newURL);
     }
   
-    componentWillMount(){
+    componentDidMount(){
       BikeApi.getFilters().then((res)=>{
         if(res) store.dispatch({type: 'LOAD_FILTERS', payload: res});
       })
@@ -37,11 +51,14 @@ class Filters extends Component {
       return (
         <div className="brand-list-container">
           {
-            this.props.filters.map((filter, i)=>{
+            this.props.filters.map((filterObject, i)=>{
               return <div>
-                <h1 key={i}>{filter.title}</h1>
-                {filter.values.map((val, i)=>{
-                  return <div key={i} to="/" onClick={()=> this.addParamToQuery(val, filter.title)}>{val}</div>
+                <h1 key={i}>{filterObject.title}</h1>
+                {filterObject.values.map((filter, i)=>{
+                  return <div>
+                          { filter.selected ? <span>true</span> : null }
+                          <div key={i} to="/" onClick={()=> this.addFilter(filter, filterObject.title)}>{filter.value}</div>
+                        </div>
                 })}
               </div>
             })

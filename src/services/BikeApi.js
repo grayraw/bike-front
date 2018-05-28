@@ -8,7 +8,8 @@ export default {
         return this.getContent(url + '/filters');
     },
     getBikeList(){
-        return this.getContent(url + '/list');
+        let query = window.location.search;
+        return this.getContent(url + '/list' + query);
     },
 
     getContent(endpoint){

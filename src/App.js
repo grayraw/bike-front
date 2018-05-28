@@ -10,10 +10,8 @@ class App extends Component {
     super()
   }
 
-  componentWillMount(){
-    BikeApi.getBikeList().then((res)=>{
-      if(res) store.dispatch({type: 'LOAD_BIKES', payload: res});
-    })
+  componentDidMount(){
+
   }
 
   render() {
