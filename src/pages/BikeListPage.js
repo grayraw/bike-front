@@ -1,53 +1,52 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 // import BikeSmall from './../components/BikeSmall'
 import { connect } from 'react-redux'
 import store from './../store/store';
 import Filters from './../components/Filters';
 import BikeApi from './../services/BikeApi';
+import BikeSmall from './../components/BikeSmall';
+
+import { Grid, Row, Col } from 'react-bootstrap';
 
 class BikeListPage extends Component {
-  constructor(props){
+  constructor(props) {
     super();
-    // this.bikeList = this.bikeList.bind(this);
-    // this.bikeList = this.bikeList || [];
   }
 
-  componentDidMount(){
-    BikeApi.getBikeList().then((res)=>{
-      if(res) store.dispatch({type: 'LOAD_BIKES', payload: res});
-    })    
+  componentDidMount() {
+    BikeApi.getBikeList().then((res) => {
+      if (res) store.dispatch({ type: 'LOAD_BIKES', payload: res });
+    })
   }
 
   render() {
     return (
-      <div className="bike-list-container">{
-        this.props.bikeList.map((bike, i)=>{
-          return <span key={i}>{bike.title}, {bike.brand} </span> 
-        })
-      }
-        {/* this.props.heirloomsPublic.map((heirloom)=>{
-            if (heirloom) {
-                var styles = {
-                    backgroundImage: 'url(' + heirloom.image + ')'
-                }
-                return (<li onClick={()=>{this.gotoHeirloom(heirloom)}} key={heirloom.id} className="heirlooms__item" >
-                    <div style={styles}></div>
-                </li>)
+      <Grid className="bike-list-container">
+        <Row>
+          <Col xs={4}>
+            <Filters />
+          </Col>
+          <Col xs={8}>
+            {
+              this.props.bikeList.map((bike, i) => {
+                var bikeLink = "bike/" + bike._id;
+                return <Link key={bike._id} to={bikeLink} ><BikeSmall bike={bike} /> </Link>
+              })
             }
-        }) */}
-      <Filters />
-      </div>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
-} 
+}
 
-const mapStateToProps = state =>{
+const mapStateToProps = state => {
   return {
-      bikeList: state.bikes.bikeList
+    bikeList: state.bikes.bikeList
   }
 }
 export default connect(
   mapStateToProps
 )(BikeListPage)
 
-  

@@ -1,0 +1,19 @@
+.single-bike-container {
+    /* width: 1200px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%); */
+}
+.bike-image, .bike-features {
+    /* width: 50%;
+    float:left; */
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.bike-image {
+    top: 120px;
+    position:relative;
+    width: 100%;
+    
+}

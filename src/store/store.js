@@ -1,10 +1,11 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import { routerMiddleware } from 'react-router-redux'
+// import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
-// import createHistory from 'history/createBrowserHistory'
+import { createBrowserHistory } from 'history'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 
 
-// export const history = createHistory();
+const history = history || createBrowserHistory();
 
 const initialState = {
 }
@@ -13,17 +14,21 @@ const initialState = {
 const enhancers = []
 const middleware = [
   thunk,
-//   routerMiddleware(history)
+  routerMiddleware(history)
+  //   routerMiddleware(history)
 ]
 
-let bikes = function(state = {bikeList: [], filters: []}, action){
-  switch(action.type){
+let bikes = function (state = { bikeList: [], filters: [], singleBike: {} }, action) {
+  switch (action.type) {
     case 'LOAD_BIKES': {
-      return {...state, bikeList: [...action.payload]}
+      return { ...state, bikeList: [...action.payload] }
+    }
+    case 'LOAD_SINGLE_BIKE': {
+      return { ...state, singleBike: action.payload }
     }
     case 'LOAD_FILTERS': {
       // debugger;
-      return {...state, filters: [...action.payload]}
+      return { ...state, filters: [...action.payload] }
     }
     default: {
       return state
@@ -42,7 +47,7 @@ const composedEnhancers = composeEnhancers(
 )
 
 const store = createStore(
-  rootReducer,
+  connectRouter(history)(rootReducer),
   initialState,
   composedEnhancers
 )

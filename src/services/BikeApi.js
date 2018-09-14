@@ -4,25 +4,33 @@ let url = 'http://localhost:8080';
 
 export default {
 
-    getFilters(){
+    getFilters() {
         return this.getContent(url + '/filters');
     },
-    getBikeList(){
+    getBikeList() {
         let query = window.location.search;
         return this.getContent(url + '/list' + query);
     },
 
-    getContent(endpoint){
+    getSingleBike() {
+        let bikeId = window.location.pathname.split('/')[2];
+        if (bikeId) {
+            return this.getContent(url + '/list' + "?_id[]=" + bikeId);
+        }
+    },
+
+    getContent(endpoint) {
         let hdrs = new Headers();
         hdrs.append('Content-Type', 'application/json');
         hdrs.append('Accept', 'application/json');
         let body = '';
-        let options = { method: 'GET',
-                        headers: hdrs,
-                        // credentials: 'include'
-                     };
-        return fetch(endpoint, options).then((response)=>{
-            switch(response.ok){
+        let options = {
+            method: 'GET',
+            headers: hdrs,
+            // credentials: 'include'
+        };
+        return fetch(endpoint, options).then((response) => {
+            switch (response.ok) {
                 case true: {
                     return response.json()
                 }
