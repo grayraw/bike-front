@@ -1,11 +1,9 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 // import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
-import { createBrowserHistory } from 'history'
+import history from './../history'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 
-
-const history = history || createBrowserHistory();
 
 const initialState = {
 }

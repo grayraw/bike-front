@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom';
 import * as qs from 'query-string';
 import BikeApi from '../services/BikeApi';
-
+import history from './../history'
+import settings from './../settings'
 
 let currentPage, currentQueryParams;
 export default class Paginator extends Component {
@@ -23,7 +24,7 @@ export default class Paginator extends Component {
         currentQueryParams.page = currentPage;
 
         let newURL = qs.stringify(currentQueryParams, { arrayFormat: "bracket" });
-        window.history.pushState(null, null, "?" + newURL);
+        history.push("?" + newURL);
 
         BikeApi.getBikeList().then((res) => {
             if (res) store.dispatch({ type: 'LOAD_BIKES', payload: res.docs });

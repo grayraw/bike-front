@@ -18,36 +18,6 @@ let currentFilters;
 class Filters extends Component {
   constructor(props) {
     super();
-    this.addFilter = this.addFilter.bind(this);
-    currentFilters = qs.parse(window.location.search, { arrayFormat: "bracket" });
-  }
-
-  addFilter(filterValue, filterName) {
-
-    //this updates url for bikeListPage to work with
-    //it's better to move it elsewhere per principle of separation of concern;
-    currentFilters = qs.parse(window.location.search, { arrayFormat: "bracket" });
-    let currentValues = currentFilters[filterName];
-
-    //if value is in url remove, otherwise add it to url
-    currentValues ?
-      currentValues.includes(filterValue) ?
-        currentValues = currentValues.filter(item => item !== filterValue) :
-        currentValues = [...currentValues, filterValue] :
-      currentValues = [filterValue];
-
-    // removes duplicates, seems no longer needed
-    // currentValues = [...new Set(currentValues)];
-
-    currentFilters[filterName] = currentValues;
-    let newURL = qs.stringify(currentFilters, { arrayFormat: "bracket" });
-
-    window.history.pushState(null, null, "?" + newURL);
-    BikeApi.getBikeList().then((res) => {
-      if (res) store.dispatch({ type: 'LOAD_BIKES', payload: res });
-    });
-
-    this.forceUpdate();
   }
 
 
@@ -63,15 +33,14 @@ class Filters extends Component {
 
   render() {
 
-    let selectedTags = Object.entries(currentFilters);
-    // debugger;
+    let selectedTags = Object.entries(qs.parse(this.props.searchQuery, { arrayFormat: "bracket" }));
     return (
       <div className="brand-list-container">
-
+        {selectedTags}
         {selectedTags.map((tagObject) => {
           if (tagObject[1] && Array.isArray(tagObject[1])) {
             return tagObject[1].map((tagString, i) => {
-              return <h4 key={tagString}><Label className="filter-tag" key={tagString} onClick={() => this.addFilter(tagString, tagObject[0])}>{tagString}</Label></h4>
+              return <h4 key={tagString}><Label className="filter-tag" key={tagString} onClick={() => this.updateFilters(tagString, tagObject[0])}>{tagString}</Label></h4>
             })
           }
         })}
@@ -99,7 +68,8 @@ class Filters extends Component {
                 return <div key={i}>
                   <h3>{displayTitle}</h3>
                   {filterObject.values.map((filter, i) => {
-                    let checked = currentFilters[filterObject.title] && currentFilters[filterObject.title].includes(filter + "") ? true : false;
+                    // let checked = currentFilters[filterObject.title] && currentFilters[filterObject.title].includes(filter + "") ? true : false;
+                    let checked = false;
                     return <div key={i} >
                       {/* <Checkbox checked={checked} onChange={() => this.addFilter(filter + "" , filterObject.title)}>{filter}</Checkbox> */}
                       <Checkbox checked={checked} onChange={() => this.updateFilters(filter, filterObject.title)}>{filter}</Checkbox>
@@ -116,7 +86,8 @@ class Filters extends Component {
 
 const mapStateToProps = state => {
   return {
-    filters: state.bikes.filters
+    filters: state.bikes.filters,
+    searchQuery: state.router.location.search
   }
 }
 export default connect(

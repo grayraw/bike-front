@@ -7,9 +7,9 @@ import { Provider } from 'react-redux';
 // import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router'
 import store from './store/store';
-import { createBrowserHistory } from 'history'
+import history from './history'
 
-const history = history || createBrowserHistory();
+
 
 ReactDOM.render(
     <Provider store={store}>

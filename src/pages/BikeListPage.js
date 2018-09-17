@@ -9,7 +9,7 @@ import BikeSmall from './../components/BikeSmall';
 import Paginator from './../components/Paginator';
 
 import { Grid, Row, Col } from 'react-bootstrap';
-
+let prevSearchQuery;
 class BikeListPage extends Component {
   constructor(props) {
     super();
@@ -22,6 +22,7 @@ class BikeListPage extends Component {
   }
 
   render() {
+
     return (
       <Grid className="bike-list-container">
         <Row>
@@ -42,6 +43,7 @@ class BikeListPage extends Component {
     );
   }
 }
+
 
 const mapStateToProps = state => {
   return {
