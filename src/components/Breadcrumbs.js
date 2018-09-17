@@ -16,12 +16,12 @@ class Breadcrumbs extends Component {
         return <div className="breadcrumbsRoot">
             {this.crumbArray.map((elem, i, arr) => {
                 return i === 0 ?
-                    <span><Link to="/" key={i}>Home</Link> / </span> :
+                    <span key={i}><Link to="/" >Home</Link> / </span> :
                     elem === "bike" && this.props.bike ?
                         <span>{this.props.bike.brand + " " + this.props.bike.title}</span> :
                         i < arr.length - i ?
                             <span><Link to="/" key={i}>{elem}</Link> / </span> :
-                            <span>{elem}</span>;
+                            <span key={i}>{elem}</span>;
             })}
         </div>
     }

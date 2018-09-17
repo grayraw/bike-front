@@ -6,6 +6,7 @@ import store from './../store/store';
 import Filters from './../components/Filters';
 import BikeApi from './../services/BikeApi';
 import BikeSmall from './../components/BikeSmall';
+import Paginator from './../components/Paginator';
 
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -16,7 +17,7 @@ class BikeListPage extends Component {
 
   componentDidMount() {
     BikeApi.getBikeList().then((res) => {
-      if (res) store.dispatch({ type: 'LOAD_BIKES', payload: res });
+      if (res) store.dispatch({ type: 'LOAD_BIKES', payload: res.docs });
     })
   }
 
@@ -35,6 +36,7 @@ class BikeListPage extends Component {
               })
             }
           </Col>
+          <Col xs={8}><Paginator /></Col>
         </Row>
       </Grid>
     );
