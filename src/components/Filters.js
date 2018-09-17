@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import store from '../store/store';
 import { connect } from 'react-redux'
 import BikeApi from '../services/BikeApi';
+import FilteringService from '../services/FilteringService';
 import { Link, withRouter } from 'react-router-dom';
 import * as qs from 'query-string';
 import InputRange from 'react-input-range';
@@ -47,6 +48,11 @@ class Filters extends Component {
     });
 
     this.forceUpdate();
+  }
+
+
+  updateFilters(val, param) {
+    FilteringService.updateQueryString(val, param);
   }
 
   componentDidMount() {
@@ -95,7 +101,8 @@ class Filters extends Component {
                   {filterObject.values.map((filter, i) => {
                     let checked = currentFilters[filterObject.title] && currentFilters[filterObject.title].includes(filter + "") ? true : false;
                     return <div key={i} >
-                      <Checkbox checked={checked} onChange={() => this.addFilter(filter + "" /* converting to string */, filterObject.title)}>{filter}</Checkbox>
+                      {/* <Checkbox checked={checked} onChange={() => this.addFilter(filter + "" , filterObject.title)}>{filter}</Checkbox> */}
+                      <Checkbox checked={checked} onChange={() => this.updateFilters(filter, filterObject.title)}>{filter}</Checkbox>
                     </div>
                   })}
                 </div>
